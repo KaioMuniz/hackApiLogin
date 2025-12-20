@@ -1,0 +1,15 @@
+package br.hackathon.com.adapters.dtos;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import lombok.Data;
+
+@Data
+public class CadastrarUsuarioResponse {
+
+	private UUID id;
+	private String email;
+	private LocalDateTime dataCriacao;
+	
+}
