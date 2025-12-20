@@ -10,6 +10,7 @@ import br.hackathon.com.adapters.dtos.CadastrarUsuarioResponse;
 import br.hackathon.com.adapters.dtos.LoginResponse;
 import br.hackathon.com.adapters.dtos.LoginUsuarioRequest;
 import br.hackathon.com.adapters.out.UsuarioRepository;
+import br.hackathon.com.application.components.CryptoComponent;
 import br.hackathon.com.application.components.JwtTokenComponent;
 import br.hackathon.com.application.ports.UsuarioService;
 import br.hackathon.com.domain.exceptions.AcessoNegadoException;
@@ -21,6 +22,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired UsuarioRepository repository;
 	@Autowired JwtTokenComponent jwtTokenComponent;
+	@Autowired CryptoComponent crypto;
 	
 	@Override
 	public CadastrarUsuarioResponse cadastrar(CadastrarUsuarioRequest request) {
@@ -31,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		var usuario = new Usuario();
 		usuario.setEmail(request.getEmail());
-		usuario.setSenha(request.getSenha());
+		usuario.setSenha(crypto.encrypt(request.getSenha()));
 		usuario.setPerfil(Perfil.valueOf(request.getPerfil()));
 		repository.save(usuario);
 		
@@ -48,7 +50,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public LoginResponse login(LoginUsuarioRequest request) {
 		
-		var usuario = repository.findByEmailAndSenha(request.getEmail(), request.getSenha());
+		var usuario = repository.findByEmailAndSenha(request.getEmail(), crypto.encrypt(request.getSenha()));
 		if(usuario == null) {
 			throw new AcessoNegadoException();
 		}
