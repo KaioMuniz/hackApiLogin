@@ -1,18 +1,44 @@
-version: '3.8'
+version: "3.8"
 
 services:
+
   postgres:
     image: postgres:16
     container_name: postgres_apilogin
     restart: always
+    environment:
+      POSTGRES_DB: api_login
+      POSTGRES_USER: api_login_user
+      POSTGRES_PASSWORD: api_login_pass
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_DB: api_login       # Nome do banco de dados
-      POSTGRES_USER: api_login_user      # Nome do usuário
-      POSTGRES_PASSWORD: api_login_pass  # Senha do usuário
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  api-login:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_login
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/api_login
+      SPRING_DATASOURCE_USERNAME: api_login_user
+      SPRING_DATASOURCE_PASSWORD: api_login_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - backend
 
 volumes:
   postgres_data:
+
+networks:
+  backend:
+    name: shared_backend
+    driver: bridge
