@@ -18,8 +18,8 @@ Nossa solução foi dividida em **4 projetos independentes e integrados**, atend
   Responsável pela **autenticação** e **segurança** do portal.  
   https://github.com/KaioMuniz/hackApiLogin
 
-- **API Fornecedor**  
-  Gerenciamento de **dados**, **cadastros** e **propostas** do lado do fornecedor.  
+- **FRONT WEB MULTI-PERFIL**  
+  O front-end é composto por **dois** **dashboards** **distintos**: um destinado à **empresa** e outro ao **fornecedor**. Abaixo, apresento o **fluxograma** detalhado com o mapeamento de todas as telas.
   https://github.com/KaioMuniz/hackApiFornecedor
 
 - **API Empresa**  
